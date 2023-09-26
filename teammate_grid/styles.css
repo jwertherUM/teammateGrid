@@ -1,0 +1,12 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 100px); /* 3 columns each 100px wide */
+    grid-gap: 10px; /* Spacing between grid items */
+  }
+  
+  .grid-item {
+    border: 1px solid black; /* Border for visualization */
+    padding: 10px;
+    text-align: center;
+  }
+  
