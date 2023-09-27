@@ -30,12 +30,6 @@ const MainScreen: React.FC = () => {
     //console.log(playerRows[row - 1], playerCols[column - 1]);
   };
 
-  const handleSearch = () => {
-    if(selectedRow && selectedColumn){
-
-    }
-  }
-
   const fetchRandomRows = async () => {
     try {
       const response = await fetch('http://127.0.0.1:3000/random-rows');
@@ -149,7 +143,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 45,
-    fontFamily: 'Roboto',
+    fontFamily: 'Courier New',
+    shadowRadius: 5,
   },
   scoreguess: {
     fontSize: 18,

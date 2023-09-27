@@ -1,9 +1,10 @@
 from flask import Flask, jsonify, request
 #from flaskext.mysql import MySQL
-from models import db, Player, PlayerGame  # Import your models from the models file
+from models import db, Player, PlayerGame, User
 from import_data import import_data
 import sqlite3
 from sqlalchemy.orm import aliased
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
@@ -14,17 +15,8 @@ db_path = 'teammate_grid.db'
 def get_db():
     return sqlite3.connect(db_path)
 
-# MySQL configurations
-# app.config['MYSQL_DATABASE_USER'] = 'root'
-# app.config['MYSQL_DATABASE_PASSWORD'] = 'Jw19794!'
-# app.config['MYSQL_DATABASE_DB'] = 'teammate_grid_db'
-# app.config['MYSQL_DATABASE_HOST'] = 'localhost'
-
-# mysql = MySQL()
-# mysql.init_app(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///teammate_grid.db'
-#db.init_app(app)
 
 
 @app.route('/random-rows', methods=['GET'])
@@ -54,6 +46,35 @@ def search_teammates(pid1, pid2):
 
     filtered_games = [game for game in games if str(game.gamepk)[5] == '2']
     return jsonify({'games': len(filtered_games)})
+
+# Registration Endpoint
+@app.route('/register', methods=['POST'])
+def register_user():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+
+    hashed_password = generate_password_hash(password, method='sha256')
+
+    new_user = User(username=username, hashed_password=hashed_password, high_score=0)
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({'message': 'User registered successfully'})
+
+
+@app.route('/login', methods=['POST'])
+def login_user():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+
+    user = User.query.filter_by(username=username).first()
+
+    if user and check_password_hash(user.hashed_password, password):
+        return jsonify({'message': 'Login successful'})
+    else:
+        return jsonify({'message': 'Invalid credentials'})
 
 def drop_and_create_tables():
     with app.app_context():

@@ -21,3 +21,9 @@ class PlayerGame(db.Model):
     __table_args__ = (
         UniqueConstraint('pid', 'gamepk', 'teamid'),
     )
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), unique=True, nullable=False)
+    hashed_password = db.Column(db.String(100), nullable=False)
+    high_score = db.Column(db.Integer, nullable=True)

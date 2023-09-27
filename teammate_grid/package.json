@@ -14,6 +14,7 @@
     "mysql": "^2.18.1",
     "react": "18.2.0",
     "react-native": "0.72.5",
+    "react-native-router-flux": "^4.3.1",
     "react-native-super-grid": "^5.0.0",
     "styled-components": "^6.0.8"
   },
