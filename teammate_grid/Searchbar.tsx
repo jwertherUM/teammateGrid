@@ -44,8 +44,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ players, pRows, pCols, colPlayer,
   const handleSelectPlayer = async (pid: number, name: string) => {
     console.log('Selected player:', name);
     if(pRows && rowPlayer && pCols && colPlayer){
-        const p1 = String(pRows[rowPlayer - 1][0]);
-        const p2 = String(pCols[colPlayer - 1][0]);
+        console.log(pRows);
+        const p1 = String(pRows[rowPlayer - 1]['pid']);
+        const p2 = String(pCols[colPlayer - 1]['pid']);
         let score1 = 0;
         let score2 = 0;
 
@@ -137,6 +138,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 10,
     paddingLeft: 10,
+    borderRadius: 5,
   },
   item: {
     padding: 10,

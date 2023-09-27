@@ -18,7 +18,7 @@ const Grid: React.FC<GridProps& { onGridBoxSelect: (row: number, column: number)
     // Calculate the row and column based on the index and dimensions
     const row = Math.floor(index / 4);
     const column = index % 4;
-    if(row >= 1 && column >= 1){
+    if(row >= 1 && column >= 1 && items[(row * 4) + column][0] == 0){
       onGridBoxSelect(row, column);
       setAR(row);
       setAC(column);

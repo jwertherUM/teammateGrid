@@ -41,33 +41,26 @@ const MainScreen: React.FC = () => {
       const response = await fetch('http://127.0.0.1:3000/random-rows');
       const data = await response.json();
 
-      const [rows, cols] = data.random_rows.reduce((acc, curr, index) => {
-        if (index < 3) {
-          acc[0].push(curr);
-        } else {
-          acc[1].push(curr);
-        }
-        return acc;
-      }, [[], []]);
-      
+      const rows = data['random_rows'].slice(0, 3);
+      const cols = data['random_rows'].slice(3, 6);
 
       setRows(rows);
       setCols(cols);
 
       const newgrid = [
         [0, ' '],
-        cols[0],
-        cols[1],
-        cols[2],
-        rows[0],
+        [cols[0].pid, cols[0].name],
+        [cols[1].pid, cols[1].name],
+        [cols[2].pid, cols[2].name],
+        [rows[0].pid, rows[0].name],
         [0, ' '],
         [0, ' '],
         [0, ' '],
-        rows[1],
+        [rows[1].pid, rows[1].name],
         [0, ' '],
         [0, ' '],
         [0, ' '],
-        rows[2],
+        [rows[2].pid, rows[2].name],
         [0, ' '],
         [0, ' '],
         [0, ' '],
@@ -86,11 +79,10 @@ const MainScreen: React.FC = () => {
       const response = await fetch('http://127.0.0.1:3000/players');
       const data = await response.json();
       const playerlist = data['players'];
-  
-      // Convert the response data to an array of Player objects
+
       const newPlayers: Player[] = playerlist.map((playerData: any) => ({
-        id: playerData[0],
-        name: playerData[1],
+        id: playerData['pid'],
+        name: playerData['name'],
       }));
   
       setPlayers(newPlayers);
@@ -114,7 +106,7 @@ const MainScreen: React.FC = () => {
   //console.log(data);
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Teammate Grid</Text>
+      <Text style={styles.title}>The Teammate Grid</Text>
       {(allPlayers) ? <Searchbar 
         players={allPlayers} 
         pRows={playerRows} 
@@ -157,6 +149,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 45,
+    fontFamily: 'Roboto',
   },
   scoreguess: {
     fontSize: 18,
