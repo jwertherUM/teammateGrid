@@ -11,6 +11,7 @@ const App = () => {
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
 
+  //registration logic
   const handleRegister = async () => {
 
       if(password === confirm && username && password && confirm){
@@ -32,6 +33,7 @@ const App = () => {
     }
   };
 
+  //login logic
   const handleLogin = async () => {
 
     if(username && password){
@@ -53,10 +55,12 @@ const App = () => {
     }
   };
 
+  //navigate back to registration
   const handleBack = () => {
     setIsRegistered(false);
   }
 
+  //navigate back to login
   const handleToLogin = () => {
     setIsRegistered(true);
   }

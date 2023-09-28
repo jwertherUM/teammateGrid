@@ -16,8 +16,8 @@ class PlayerGame(db.Model):
     pid = db.Column(db.Integer, primary_key=True)
     gamepk = db.Column(db.Integer, primary_key=True)
     teamid = db.Column(db.Integer, primary_key=True)
-    # ... other columns
 
+    #playergame is guaranteed to have a unique combination of player, game, and team ids
     __table_args__ = (
         UniqueConstraint('pid', 'gamepk', 'teamid'),
     )

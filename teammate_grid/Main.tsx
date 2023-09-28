@@ -1,7 +1,5 @@
-// src/MainScreen.tsx
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, Text, StyleSheet, Image, Dimensions, View } from 'react-native';
-//import SearchBar from './SearchBar';
 import Grid from './Grid';
 import Searchbar from './Searchbar';
 import GameOver from './GameOver';
@@ -11,11 +9,9 @@ interface Player {
   name: string;
 }
 
-type NumberStringTuple = [number, string];
 const windowWidth = Dimensions.get('window').width;
 
 const MainScreen: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
   const[playerRows, setRows] = useState([]);
   const[playerCols, setCols] = useState([]);
   const[allPlayers, setPlayers] = useState<Player[] | null>(null);
@@ -27,11 +23,13 @@ const MainScreen: React.FC = () => {
   const [gameOver, setGameOver] = useState(false);
 
 
+  //track selected grid indices
   const handleGridBoxSelection = (row: number, column: number) => {
     setSelectedRow(row);
     setSelectedColumn(column);
   };
 
+  //populate starter rows and cols, empty grid
   const fetchRandomRows = async () => {
     try {
       const response = await fetch('http://127.0.0.1:3000/random-rows');
@@ -70,6 +68,7 @@ const MainScreen: React.FC = () => {
     }
   };
 
+  //populate dropdown with all players
   const fetchPlayers = async () => {
     try {
       const response = await fetch('http://127.0.0.1:3000/players');
@@ -93,9 +92,9 @@ const MainScreen: React.FC = () => {
     fetchPlayers();
   }, []);
 
+  //game over trigger
   useEffect(() => {
     if (guesses === 0) {
-      console.log("ZERO");
       setGameOver(true);
     }
   }, [guesses]);

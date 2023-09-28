@@ -26,13 +26,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ players, pRows, pCols, colPlayer,
   const [query, setQuery] = useState<string>('');
   const [filteredPlayers, setFilteredPlayers] = useState<HockeyPlayer[]>([]);
 
+  //searchbar is really just a dropdown, trim all players that match searchbar input
   const handleSearch = (text: string) => {
     setQuery(text);
     if(text.trim() === ''){
         setFilteredPlayers([]);
     }
     else{
-        // Update filtered players based on the new query
         const filtered = players.filter(player =>
             player.name.toLowerCase().startsWith(text.toLowerCase())
         );
@@ -41,17 +41,15 @@ const SearchBar: React.FC<SearchBarProps> = ({ players, pRows, pCols, colPlayer,
    
   };
 
+  //if square is selected, search for inputted player against row and col player
+  //decrement guesses and add to score accordingly
   const handleSelectPlayer = async (pid: number, name: string) => {
-    console.log('Selected player:', name);
     if(pRows && rowPlayer && pCols && colPlayer){
         console.log(pRows);
         const p1 = String(pRows[rowPlayer - 1]['pid']);
         const p2 = String(pCols[colPlayer - 1]['pid']);
         let score1 = 0;
         let score2 = 0;
-
-        console.log(p1);
-        console.log(p2);
 
         const url1 = 'http://127.0.0.1:3000/search_teammates/' + String(pid) + '/' + p1
         const url2 = 'http://127.0.0.1:3000/search_teammates/' + String(pid) + '/' + p2
@@ -76,9 +74,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ players, pRows, pCols, colPlayer,
             console.error('Error:', error);
         }
 
-        console.log(score1, score2);
-        //setQuery(' ');
-        //setFilteredPlayers([]);
         if(score1 > 0 && score2 > 0){
             setScore((prevScore) => (prevScore || 0) + score1 + score2);
             if(grid){
@@ -114,7 +109,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ players, pRows, pCols, colPlayer,
         renderItem= {({ item }) => {
             
         const handleClick = () => {
-            handleSelectPlayer(item.id, item.name); // Call the handleGridBoxClick function with the index
+            handleSelectPlayer(item.id, item.name);
         };
 
         return (

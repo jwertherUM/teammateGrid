@@ -9,6 +9,7 @@ import secrets
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
+
 # SQLite database file path
 db_path = 'teammate_grid.db'
 
@@ -20,6 +21,7 @@ def get_db():
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///teammate_grid.db'
 
 
+#creates starter rows and columns for games, randomized
 @app.route('/random-rows', methods=['GET'])
 def get_random_rows():
     random_players = Player.query.order_by(db.func.random()).limit(6).all()
@@ -27,6 +29,7 @@ def get_random_rows():
     print(random_rows)
     return jsonify({'random_rows': random_rows})
 
+#fetches all players, populates dropdown
 @app.route('/players', methods=['GET'])
 def get_players():
     players = Player.query.all()
@@ -34,6 +37,7 @@ def get_players():
     print(player_data[0])
     return jsonify({'players': player_data})
 
+#returns number of games two players participated in together as teammates
 @app.route('/search_teammates/<int:pid1>/<int:pid2>', methods=['GET'])
 def search_teammates(pid1, pid2):
     pg1 = aliased(PlayerGame)
@@ -48,7 +52,7 @@ def search_teammates(pid1, pid2):
     filtered_games = [game for game in games if str(game.gamepk)[5] == '2']
     return jsonify({'games': len(filtered_games)})
 
-# Registration Endpoint
+#adds user to db
 @app.route('/register', methods=['POST'])
 def register_user():
     data = request.get_json()
@@ -63,7 +67,7 @@ def register_user():
 
     return jsonify({'message': 'User registered successfully'})
 
-
+#logs in user
 @app.route('/login', methods=['POST'])
 def login_user():
     data = request.get_json()
@@ -81,6 +85,7 @@ def login_user():
         return jsonify({'message': 'Invalid credentials'})
     
 
+#retrieves profile details from session
 @app.route('/profile', methods=['GET'])
 def profile():
     # Access the user ID from the session

@@ -11,6 +11,7 @@ const GameOver: React.FC<GameOverProps> = ({ onRestart, score }) => {
     const [username, setUsername] = useState('');
     const [highscore, setHS] = useState(0);
 
+    //retrieve profile for high score, messages
     const fetchProfile = async () => {
         try {
             const response = await fetch('http://127.0.0.1:3000/profile');

@@ -1,6 +1,7 @@
 import csv
-from models import db, Player, PlayerGame  # Import your models from the models file
+from models import db, Player, PlayerGame
 
+#imports csvs in bulk, creates players and playergames tables
 def import_data():
     print("Importing Data")
     plist = []
