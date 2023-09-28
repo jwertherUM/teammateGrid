@@ -1,13 +1,14 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, session
 #from flaskext.mysql import MySQL
 from models import db, Player, PlayerGame, User
 from import_data import import_data
 import sqlite3
 from sqlalchemy.orm import aliased
 from werkzeug.security import generate_password_hash, check_password_hash
+import secrets
 
 app = Flask(__name__)
-
+app.secret_key = secrets.token_hex(16)
 # SQLite database file path
 db_path = 'teammate_grid.db'
 
@@ -72,9 +73,25 @@ def login_user():
     user = User.query.filter_by(username=username).first()
 
     if user and check_password_hash(user.hashed_password, password):
+        session['user_id'] = user.id
+        session['username'] = user.username
+        session['high_score'] = user.high_score
         return jsonify({'message': 'Login successful'})
     else:
         return jsonify({'message': 'Invalid credentials'})
+    
+
+@app.route('/profile', methods=['GET'])
+def profile():
+    # Access the user ID from the session
+    user_id = session.get('user_id')
+    high_score = session.get('high_score')
+    username = session.get('username')
+
+    if user_id:
+        return jsonify({'user': {'user_id': user_id, 'high_score': high_score, 'username': username}})
+    else:
+        return 'User not logged in'
 
 def drop_and_create_tables():
     with app.app_context():

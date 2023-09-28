@@ -1,9 +1,10 @@
 // src/MainScreen.tsx
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, Text, StyleSheet } from 'react-native';
+import { SafeAreaView, Text, StyleSheet, Image, Dimensions } from 'react-native';
 //import SearchBar from './SearchBar';
 import Grid from './Grid';
 import Searchbar from './Searchbar';
+import GameOver from './GameOver';
 
 interface Player {
   id: number;
@@ -11,6 +12,7 @@ interface Player {
 }
 
 type NumberStringTuple = [number, string];
+const windowWidth = Dimensions.get('window').width;
 
 const MainScreen: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,6 +24,7 @@ const MainScreen: React.FC = () => {
   const [score, setScore] = useState<number | null>(0);
   const [guesses, setGuesses] = useState<number | null>(9);
   const [grid, setGrid] = useState<(string | number)[][] | null>([]);
+  const [gameOver, setGameOver] = useState(false);
 
 
   const handleGridBoxSelection = (row: number, column: number) => {
@@ -87,19 +90,42 @@ const MainScreen: React.FC = () => {
 
 
   useEffect(() => {
-    fetchRandomRows(); // Fetch data when the component mounts
+    fetchRandomRows();
     fetchPlayers();
   }, []);
 
-
+  useEffect(() => {
+    if (guesses === 0) {
+      // Execute the callback when guesses reach 0
+      console.log("ZERO");
+      setGameOver(true);
+    }
+  }, [guesses]);
+  
   const handleSearchChange = (text: string) => {
     setSearchTerm(text);
+  };
+
+  const handleRestart = () => {
+    setScore(0);
+    setGuesses(9);
+    setSelectedColumn(0);
+    setSelectedRow(0);
+    fetchRandomRows();
+    setGameOver(false);
+
   };
 
   
   //console.log(data);
   return (
     <SafeAreaView style={styles.container}>
+      { gameOver ? (<GameOver score={score} onRestart={handleRestart}/>) : (
+      <React.Fragment>
+      <Image
+        source={require('./img/rink_diagram.jpeg')}
+        style={[styles.rink, { width: windowWidth, opacity: 0.5 }]} // Adjust opacity here
+      />
       <Text style={styles.title}>The Teammate Grid</Text>
       {(allPlayers) ? <Searchbar 
         players={allPlayers} 
@@ -126,8 +152,10 @@ const MainScreen: React.FC = () => {
       ) : (
         <Text>Loading...</Text>
       )}
-    <Text style={styles.scoreguess}>Guesses: {guesses}</Text>
-    <Text style={styles.scoreguess}>Score: {score}</Text>
+      <Text style={styles.scoreguess}>Guesses: {guesses}</Text>
+      <Text style={styles.scoreguess}>Score: {score}</Text>
+      </React.Fragment>
+      )}
     </SafeAreaView>
   );
 
@@ -150,6 +178,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  rink: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    height: 125
+    //resizeMode: 'cover',
   }
 });
 

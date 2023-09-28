@@ -40,7 +40,7 @@ const Grid: React.FC<GridProps& { onGridBoxSelect: (row: number, column: number)
         const itemStyle = {
           ...styles.itemContainer,
           borderWidth: (isFirstColumn  || isTopRow) ? 0 : 1,
-          backgroundColor: (isActiveRow && isActiveCol) ? 'yellow' : 'white'
+          backgroundColor: (isActiveRow && isActiveCol) ? '#F8FBA9' : 'white'
         };
 
         const handleClick = () => {

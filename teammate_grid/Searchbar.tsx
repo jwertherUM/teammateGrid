@@ -36,7 +36,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ players, pRows, pCols, colPlayer,
         const filtered = players.filter(player =>
             player.name.toLowerCase().startsWith(text.toLowerCase())
         );
-        setFilteredPlayers(filtered.slice(0, 6));
+        setFilteredPlayers(filtered.slice(0, 5));
     }
    
   };
@@ -104,7 +104,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ players, pRows, pCols, colPlayer,
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        placeholder="Search Players From 2011-Present"
+        placeholder="Search Any Player Since the 2011-2012 Season"
         value={query}
         onChangeText={handleSearch}
       />
@@ -144,8 +144,7 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 18,
     borderBottomWidth: 1,
-    borderColor: 'lightgray',
-    zIndex: 1,
+    textDecorationLine: 'underline',
   },
 });
 
