@@ -1,9 +1,8 @@
 #!/bin/bash
 
 # Start the Flask app in the background
-cd /flask_backend
-python app.py &
-cd ..
+cd flask_backend/
+python3 app.py
 
 # Start the React Native app
 cd /teammate_grid

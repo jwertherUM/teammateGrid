@@ -96,7 +96,7 @@ const App = () => {
           <View style={styles.stripe}></View>
           <View style={styles.stripel}></View>
           <View style={styles.striper}></View>
-          <Text style={styles.header}>Welcome to Teammate Grid! Register Below: </Text>
+          <Text style={styles.header}>Welcome to Teammate Grid!</Text>
           <TextInput
             style={styles.input}
             placeholder="Username"
@@ -134,7 +134,8 @@ const styles = StyleSheet.create({
   header: {
     textAlign: 'center',
     fontWeight: 'bold',
-    padding: 25,
+    padding: 15,
+    fontSize: 20,
   },
   input: {
     height: 40,
@@ -149,7 +150,7 @@ const styles = StyleSheet.create({
   },
   outer: {
     borderWidth: 2,
-    borderColor: 'gray',
+    borderColor: '#FEC4CB',
     width: windowWidth * .9,
     left: '5%',
     borderRadius: 15,
@@ -182,7 +183,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: 'white',
     alignSelf: 'center',
-    borderColor: 'black',
+    borderColor: '#FEC4CB',
     borderWidth: 0.5,
     borderRadius: 3,
     marginBottom: 7,

@@ -8,14 +8,12 @@ interface GridProps {
 }
 
 const Grid: React.FC<GridProps& { onGridBoxSelect: (row: number, column: number) => void}> = ({ dimensions, items, onGridBoxSelect }) => {
-  
-  //console.log(items);
   const itemNames = items.map(item => item[1]);
   const [activeRow, setAR] = useState<number | null>(null);
   const [activeCol, setAC] = useState<number | null>(null);
 
+  //grid is a 1d list, have to calculate simulated 2d indices then set active row and column accordingly
   const handleGridBoxClick = (index: number) => {
-    // Calculate the row and column based on the index and dimensions
     const row = Math.floor(index / 4);
     const column = index % 4;
     if(row >= 1 && column >= 1 && items[(row * 4) + column][0] == 0){
@@ -40,11 +38,11 @@ const Grid: React.FC<GridProps& { onGridBoxSelect: (row: number, column: number)
         const itemStyle = {
           ...styles.itemContainer,
           borderWidth: (isFirstColumn  || isTopRow) ? 0 : 1,
-          backgroundColor: (isActiveRow && isActiveCol) ? '#F8FBA9' : 'white'
+          backgroundColor: (isActiveRow && isActiveCol) ? '#F8FBA9' : 'white' //turn selected square yellow
         };
 
         const handleClick = () => {
-          handleGridBoxClick(index); // Call the handleGridBoxClick function with the index
+          handleGridBoxClick(index);
         };
       
         return (

@@ -117,7 +117,7 @@ const MainScreen: React.FC = () => {
       <React.Fragment>
       <Image
         source={require('./img/rink_diagram.jpeg')}
-        style={[styles.rink, { width: windowWidth, opacity: 0.5 }]} // Adjust opacity here
+        style={[styles.rink, { width: windowWidth, opacity: 0.5 }]}
       />
       <Text style={styles.title}>The Teammate Grid</Text>
       {(allPlayers) ? <Searchbar 

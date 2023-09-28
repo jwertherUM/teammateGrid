@@ -45,7 +45,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ players, pRows, pCols, colPlayer,
   //decrement guesses and add to score accordingly
   const handleSelectPlayer = async (pid: number, name: string) => {
     if(pRows && rowPlayer && pCols && colPlayer){
-        console.log(pRows);
         const p1 = String(pRows[rowPlayer - 1]['pid']);
         const p2 = String(pCols[colPlayer - 1]['pid']);
         let score1 = 0;
@@ -57,7 +56,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ players, pRows, pCols, colPlayer,
         try {
             const response = await fetch(url1);
             const data = await response.json();
-            console.log(data);
             score1 += data['games'];
           } 
         catch (error) {
@@ -67,7 +65,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ players, pRows, pCols, colPlayer,
         try {
             const response = await fetch(url2);
             const data = await response.json();
-            console.log(data);
             score2 += data['games'];
           } 
         catch (error) {

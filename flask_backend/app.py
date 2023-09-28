@@ -26,7 +26,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///teammate_grid.db'
 def get_random_rows():
     random_players = Player.query.order_by(db.func.random()).limit(6).all()
     random_rows = [{'pid': player.pid, 'name': player.name} for player in random_players]
-    print(random_rows)
     return jsonify({'random_rows': random_rows})
 
 #fetches all players, populates dropdown
@@ -34,7 +33,6 @@ def get_random_rows():
 def get_players():
     players = Player.query.all()
     player_data = [{'pid': player.pid, 'name': player.name} for player in players]
-    print(player_data[0])
     return jsonify({'players': player_data})
 
 #returns number of games two players participated in together as teammates
