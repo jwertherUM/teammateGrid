@@ -4,3 +4,4 @@ flask_backend/venv/
 # Exclude any other files or directories you want to ignore
 # For example, you can add .DS_Store for macOS
 .DS_Store
+*.db
