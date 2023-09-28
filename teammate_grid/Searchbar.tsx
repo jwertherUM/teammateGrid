@@ -91,7 +91,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ players, pRows, pCols, colPlayer,
             }
             
         }
-        setGuesses((prevGuesses) => (prevGuesses > 0 ? prevGuesses - 1 : prevGuesses = 0))
+        setGuesses((prevGuesses) => prevGuesses ? (prevGuesses > 0 ? prevGuesses - 1 : prevGuesses = 0) : prevGuesses)
 
         return score;
     }
@@ -134,11 +134,13 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: '#FEC4CB',
     borderWidth: 1,
-    marginBottom: 10,
+    marginBottom: -10,
+    marginTop: 10,
     paddingLeft: 10,
     borderRadius: 5,
+    backgroundColor: '#F5FAFF',
   },
   item: {
     padding: 10,

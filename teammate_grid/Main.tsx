@@ -1,6 +1,6 @@
 // src/MainScreen.tsx
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, Text, StyleSheet, Image, Dimensions } from 'react-native';
+import { SafeAreaView, Text, StyleSheet, Image, Dimensions, View } from 'react-native';
 //import SearchBar from './SearchBar';
 import Grid from './Grid';
 import Searchbar from './Searchbar';
@@ -30,7 +30,6 @@ const MainScreen: React.FC = () => {
   const handleGridBoxSelection = (row: number, column: number) => {
     setSelectedRow(row);
     setSelectedColumn(column);
-    //console.log(playerRows[row - 1], playerCols[column - 1]);
   };
 
   const fetchRandomRows = async () => {
@@ -96,15 +95,11 @@ const MainScreen: React.FC = () => {
 
   useEffect(() => {
     if (guesses === 0) {
-      // Execute the callback when guesses reach 0
       console.log("ZERO");
       setGameOver(true);
     }
   }, [guesses]);
   
-  const handleSearchChange = (text: string) => {
-    setSearchTerm(text);
-  };
 
   const handleRestart = () => {
     setScore(0);
@@ -117,7 +112,6 @@ const MainScreen: React.FC = () => {
   };
 
   
-  //console.log(data);
   return (
     <SafeAreaView style={styles.container}>
       { gameOver ? (<GameOver score={score} onRestart={handleRestart}/>) : (
@@ -152,8 +146,10 @@ const MainScreen: React.FC = () => {
       ) : (
         <Text>Loading...</Text>
       )}
-      <Text style={styles.scoreguess}>Guesses: {guesses}</Text>
-      <Text style={styles.scoreguess}>Score: {score}</Text>
+      <View style={styles.scoreContainer}>
+        <Text style={styles.scoreguess}>Guesses: {guesses}</Text>
+        <Text style={styles.scoreguess}>Score: {score}</Text>
+      </View>
       </React.Fragment>
       )}
     </SafeAreaView>
@@ -184,7 +180,15 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     height: 125
-    //resizeMode: 'cover',
+  },
+  scoreContainer: {
+    position: 'absolute',
+    bottom: 0,
+    width: windowWidth,
+    backgroundColor: '#F5FAFF',
+    borderTopColor: '#FEC4CB',
+    borderTopWidth: 3,
+    padding: 7,
   }
 });
 

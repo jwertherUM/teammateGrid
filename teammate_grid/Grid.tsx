@@ -79,9 +79,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
 
   },
-  clearLeft: {
-    clear: 'left',
-  },
 });
 
 export default Grid;
