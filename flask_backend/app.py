@@ -6,6 +6,7 @@ import sqlite3
 from sqlalchemy.orm import aliased
 from werkzeug.security import generate_password_hash, check_password_hash
 import secrets
+from sqlalchemy import func, distinct
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -24,8 +25,81 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///teammate_grid.db'
 #creates starter rows and columns for games, randomized
 @app.route('/random-rows', methods=['GET'])
 def get_random_rows():
-    random_players = Player.query.order_by(db.func.random()).limit(6).all()
-    random_rows = [{'pid': player.pid, 'name': player.name} for player in random_players]
+    #start with exclusively league vets on the perimeter to ease the difficulty of the game
+
+    def check_teammates(player1_id, player2_id):
+        #check if two players have a shared teammate
+        pg = aliased(PlayerGame)
+
+        teammates_player1 = (
+        PlayerGame.query
+        .join(pg, PlayerGame.gamepk == pg.gamepk)
+        .filter(PlayerGame.pid == player1_id)
+        .with_entities(pg.pid)
+        .distinct()
+        .filter(pg.pid != player1_id) #exclude self
+        .all()
+        )
+    
+        teammates_player2 = (
+        PlayerGame.query
+        .join(pg, PlayerGame.gamepk == pg.gamepk)
+        .filter(PlayerGame.pid == player2_id)
+        .with_entities(pg.pid)
+        .distinct()
+        .filter(pg.pid != player2_id)
+        .all()
+        )
+
+        #convert the results to sets of teammate IDs
+        teammates_set_player1 = set(row[0] for row in teammates_player1)
+        teammates_set_player2 = set(row[0] for row in teammates_player2)
+        
+        #check if the sets of teammates intersect
+        shared_teammate = bool(teammates_set_player1 & teammates_set_player2)
+        return shared_teammate
+    
+    #validate if the starter rows and columns have overlapping teammates
+    def check_grid(starters):
+        rows = starters[:3]
+        cols = starters[3:]
+
+        for player1 in rows:
+            for player2 in cols:
+                haveshared = check_teammates(player1.pid, player2.pid)
+                if not haveshared:
+                    print(rows, cols)
+                    return False
+        return True
+
+
+    #by limiting the search space to players with maximized amounts of teammates, a valid grid will be found much quicker
+    journeymen = (
+        Player.query
+        .join(PlayerGame, Player.pid == PlayerGame.pid) 
+        .with_entities(Player.pid, Player.name,
+                    func.count().label('game_count'), func.count(func.distinct(PlayerGame.teamid)).label('team_count'))
+        .group_by(Player.pid, Player.name)
+        .having((func.count() > 200) & (func.count(func.distinct(PlayerGame.teamid)) > 4))
+        .order_by(db.func.random()).limit(6).all()
+    )
+
+    #repeat until found
+    random_rows = []
+    while not check_grid(journeymen):
+        journeymen = (
+        Player.query
+        .join(PlayerGame, Player.pid == PlayerGame.pid)
+        .with_entities(Player.pid, Player.name,
+                    func.count().label('game_count'), func.count(func.distinct(PlayerGame.teamid)).label('team_count'))
+        .group_by(Player.pid, Player.name)
+        .having((func.count() > 200) & (func.count(func.distinct(PlayerGame.teamid)) > 4))
+        .order_by(db.func.random()).limit(6).all()
+        )
+    
+    random_rows = [{'pid': player.pid, 'name': player.name} for player in journeymen]
+    
+
     return jsonify({'random_rows': random_rows})
 
 #fetches all players, populates dropdown
@@ -33,6 +107,7 @@ def get_random_rows():
 def get_players():
     players = Player.query.all()
     player_data = [{'pid': player.pid, 'name': player.name} for player in players]
+
     return jsonify({'players': player_data})
 
 #returns number of games two players participated in together as teammates
@@ -86,7 +161,7 @@ def login_user():
 #retrieves profile details from session
 @app.route('/profile', methods=['GET'])
 def profile():
-    # Access the user ID from the session
+    #access the user ID from the session
     user_id = session.get('user_id')
     high_score = session.get('high_score')
     username = session.get('username')
@@ -98,16 +173,16 @@ def profile():
 
 def drop_and_create_tables():
     with app.app_context():
-        # Drop all tables
+        #drop all tables
         db.drop_all()
         
-        # Create tables and import data
+        #create tables and import data
         db.create_all()
         import_data()
     
 
 if __name__ == '__main__':
-    # Initialize the app and database
+    #initialize the app and database
     from app import app
     app.app_context().push()
     db.init_app(app)

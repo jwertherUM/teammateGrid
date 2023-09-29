@@ -133,7 +133,7 @@ const MainScreen: React.FC = () => {
         grid={grid}
         setGrid={setGrid}
       /> : (
-        <Text>Loading...</Text>
+        <Text style={{top:'40%', textAlign:'center'}}>Loading...</Text>
       )}
       {(playerRows && playerCols && playerCols[0] && playerCols[1] && playerCols[2] &&
       playerRows[0] && playerRows[1] && playerRows[2] && grid) ? (
@@ -143,7 +143,7 @@ const MainScreen: React.FC = () => {
           onGridBoxSelect={handleGridBoxSelection}
         />
       ) : (
-        <Text>Loading...</Text>
+        <Text style={{top:'40%', textAlign:'center'}}>Loading Grid...</Text>
       )}
       <View style={styles.scoreContainer}>
         <Text style={styles.scoreguess}>Guesses: {guesses}</Text>
