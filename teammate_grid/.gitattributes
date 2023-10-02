@@ -1,0 +1,12 @@
+# TypeScript files
+*.ts linguist-language=TypeScript
+*.tsx linguist-language=TypeScript
+
+# JavaScript files
+*.js linguist-language=JavaScript
+
+# Python files
+*.py linguist-language=Python
+
+# Ignore Jupyter Notebook files
+*.ipynb linguist-language=Markdown
