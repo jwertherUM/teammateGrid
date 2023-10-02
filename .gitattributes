@@ -1,0 +1,5 @@
+# TypeScript files
+*.ts linguist-language=TypeScript
+
+# Python files
+*.py linguist-language=Python
