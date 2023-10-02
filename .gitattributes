@@ -3,3 +3,6 @@
 
 # Python files
 *.py linguist-language=Python
+
+# Ignore Jupyter Notebook files
+*.ipynb linguist-language=Markdown
